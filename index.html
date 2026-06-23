@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tekanan Hidrostatis - Interaktif</title>
+    <!-- Tailwind CSS untuk Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles untuk mempercantik slider dan transisi */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+        }
+        
+        .fluid-transition {
+            transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        .tank-glass {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-3">Tekanan Hidrostatis</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Eksplorasi konsep dasar mekanika fluida: <span class="font-semibold italic font-serif">P = ρ &middot; g &middot; h</span>. <br/> 
+                Penting untuk desain bendungan, tangki air, dan dinding penahan tanah di Teknik Sipil.
+            </p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Column: Controls & Explanation (Span 7) -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+                
+                <!-- Controls Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2"><i class="fas fa-sliders-h text-blue-500 mr-2"></i> Parameter Fluida</h2>
+                    
+                    <!-- Kedalaman Slider -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="h-slider" class="font-semibold text-gray-700">Kedalaman Air (h)</label>
+                            <span class="text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-lg text-lg"><span id="h-val">5.0</span> m</span>
+                        </div>
+                        <input type="range" id="h-slider" min="0" max="10" step="0.1" value="5">
+                        <div class="flex justify-between text-xs text-gray-400 mt-1 font-medium">
+                            <span>0 m (Permukaan)</span>
+                            <span>10 m (Maks)</span>
+                        </div>
+                    </div>
+
+                    <!-- Densitas Slider -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="rho-slider" class="font-semibold text-gray-700">Massa Jenis Fluida (ρ)</label>
+                            <span class="text-green-600 font-bold bg-green-50 px-3 py-1 rounded-lg text-lg"><span id="rho-val">1000</span> kg/m³</span>
+                        </div>
+                        <input type="range" id="rho-slider" min="800" max="1500" step="10" value="1000">
+                        <div class="flex justify-between text-xs text-gray-400 mt-1 font-medium">
+                            <span>800 (Minyak ringan)</span>
+                            <span>1000 (Air Bersih)</span>
+                            <span>1500 (Lumpur/Campuran)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-book text-blue-500 mr-2"></i> Konsep Dasar & Persamaan</h2>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-5 rounded-r-lg">
+                        <p class="text-xl text-center font-serif text-blue-900 font-bold tracking-wider">P = ρ &times; g &times; h</p>
+                    </div>
+                    
+                    <ul class="space-y-3 text-gray-600 mb-6">
+                        <li><strong>P (Tekanan Hidrostatis)</strong>: Tekanan yang diakibatkan oleh gaya berat fluida yang diam. (Satuan: Pascal atau N/m²)</li>
+                        <li><strong>ρ (Rho)</strong>: Massa jenis fluida. Semakin pekat/padat fluidanya, tekanannya makin besar. Air = 1000 kg/m³.</li>
+                        <li><strong>g (Gravitasi)</strong>: Percepatan gravitasi bumi (konstan <span class="font-mono bg-gray-100 px-1 rounded">9.81 m/s²</span>).</li>
+                        <li><strong>h (Kedalaman)</strong>: Jarak vertikal dari permukaan fluida ke titik tinjauan. Tekanan berbanding lurus dengan kedalaman.</li>
+                    </ul>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h4 class="font-bold text-yellow-800 mb-1"><i class="fas fa-hard-hat mr-2"></i>Aplikasi Teknik Sipil</h4>
+                        <p class="text-sm text-yellow-700">
+                            Dalam perancangan <strong>Dinding Penahan Tanah (Retaining Wall)</strong> atau <strong>Bendungan (Dam)</strong>, profil tekanan hidrostatis berbentuk segitiga. Tekanan nol di permukaan dan maksimal di dasar (P = ρgh). Inilah alasan dasar bendungan selalu didesain jauh lebih tebal dibandingkan bagian atasnya.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Visualization (Span 5) -->
+            <div class="lg:col-span-5 flex flex-col">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 flex-grow flex flex-col items-center">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 w-full text-center">Visualisasi Tangki</h2>
+                    
+                    <!-- Tank Container -->
+                    <div class="relative w-48 h-80 border-l-4 border-r-4 border-b-4 border-gray-400 rounded-b-xl bg-gray-50 flex items-end tank-glass overflow-hidden shadow-inner">
+                        
+                        <!-- Fluid -->
+                        <div id="fluid-box" class="w-full fluid-transition relative" style="height: 50%; background-color: rgba(59, 130, 246, 0.8);">
+                            <!-- Waves effect (simple CSS border) -->
+                            <div class="absolute top-0 w-full h-2 bg-white opacity-30"></div>
+                            
+                            <!-- Depth Arrow -->
+                            <div class="absolute right-2 top-0 bottom-0 w-4 flex flex-col justify-between py-1">
+                                <div class="w-full h-px bg-white/70"></div>
+                                <div class="h-full w-px bg-white/70 mx-auto"></div>
+                                <div class="w-full h-px bg-white/70"></div>
+                            </div>
+                            <span id="depth-label" class="absolute right-8 top-1/2 -translate-y-1/2 text-white font-bold text-sm shadow-sm">5.0m</span>
+                        </div>
+
+                        <!-- Pressure Point Indicator (Bottom) -->
+                        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 flex flex-col items-center z-10">
+                            <i class="fas fa-crosshairs text-red-600 text-lg"></i>
+                            <div class="text-[10px] font-bold text-red-700 bg-white/80 px-1 rounded mt-1">Titik Tinjauan (Dasar)</div>
+                        </div>
+
+                        <!-- Scale lines on the left -->
+                        <div class="absolute left-0 bottom-0 h-full w-4 border-r border-gray-300/50 flex flex-col-reverse justify-between py-1 z-0">
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                            <div class="w-2 h-px bg-gray-400"></div>
+                        </div>
+                    </div>
+
+                    <!-- Result Panel -->
+                    <div class="mt-8 w-full bg-gray-900 rounded-xl p-5 text-center shadow-lg relative overflow-hidden">
+                        <!-- Decorative background circle -->
+                        <div class="absolute -right-6 -top-6 w-20 h-20 bg-blue-500 rounded-full opacity-20 blur-xl"></div>
+                        <div class="absolute -left-6 -bottom-6 w-20 h-20 bg-green-500 rounded-full opacity-20 blur-xl"></div>
+                        
+                        <p class="text-gray-400 text-sm font-semibold uppercase tracking-wider mb-1 relative z-10">Total Tekanan di Dasar (P)</p>
+                        <div class="flex items-end justify-center gap-2 relative z-10">
+                            <span id="pressure-result" class="text-4xl font-extrabold text-white font-mono">49.05</span>
+                            <span class="text-xl text-gray-300 font-bold mb-1">kPa</span>
+                        </div>
+                        <p id="calc-breakdown" class="text-xs text-gray-500 mt-2 font-mono relative z-10">
+                            (1000 × 9.81 × 5) / 1000
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const hSlider = document.getElementById('h-slider');
+            const rhoSlider = document.getElementById('rho-slider');
+            const hVal = document.getElementById('h-val');
+            const rhoVal = document.getElementById('rho-val');
+            
+            const pressureResult = document.getElementById('pressure-result');
+            const calcBreakdown = document.getElementById('calc-breakdown');
+            const fluidBox = document.getElementById('fluid-box');
+            const depthLabel = document.getElementById('depth-label');
+
+            const g = 9.81; // Percepatan gravitasi bumi (m/s^2)
+            const MAX_HEIGHT = 10; // Maksimal tangki 10m
+
+            function updateSimulation() {
+                // Get values
+                const h = parseFloat(hSlider.value);
+                const rho = parseFloat(rhoSlider.value);
+
+                // Update text displays
+                hVal.textContent = h.toFixed(1);
+                rhoVal.textContent = rho;
+                depthLabel.textContent = h.toFixed(1) + 'm';
+
+                // Calculate Pressure: P = rho * g * h (in Pascals)
+                const pressurePa = rho * g * h;
+                
+                // Convert to kiloPascals (kPa) for better readability
+                const pressureKpa = pressurePa / 1000;
+
+                // Update Result
+                pressureResult.textContent = pressureKpa.toFixed(2);
+                calcBreakdown.textContent = `(${rho} × 9.81 × ${h.toFixed(1)}) / 1000`;
+
+                // Update Fluid Visuals (Height)
+                const heightPercentage = (h / MAX_HEIGHT) * 100;
+                fluidBox.style.height = `${heightPercentage}%`;
+
+                // Update Fluid Color based on density
+                // 800 (Oil) -> Yellowish/Orange
+                // 1000 (Water) -> Blue
+                // 1500 (Mud/Heavy) -> Dark Brownish-blue
+                let fluidColor;
+                if (rho <= 1000) {
+                    // Interpolate between Yellowish (800) and Blue (1000)
+                    const ratio = (rho - 800) / 200; // 0 to 1
+                    const r = Math.round(234 + ratio * (59 - 234));
+                    const gr = Math.round(179 + ratio * (130 - 179));
+                    const b = Math.round(8 + ratio * (246 - 8));
+                    fluidColor = `rgba(${r}, ${gr}, ${b}, 0.85)`;
+                } else {
+                    // Interpolate between Blue (1000) and Dark Slate/Mud (1500)
+                    const ratio = (rho - 1000) / 500; // 0 to 1
+                    const r = Math.round(59 + ratio * (40 - 59));
+                    const gr = Math.round(130 + ratio * (60 - 130));
+                    const b = Math.round(246 + ratio * (80 - 246));
+                    fluidColor = `rgba(${r}, ${gr}, ${b}, 0.9)`;
+                }
+                
+                fluidBox.style.backgroundColor = fluidColor;
+                
+                // Hide depth label if height is 0
+                if(h === 0) {
+                    depthLabel.style.display = 'none';
+                } else {
+                    depthLabel.style.display = 'block';
+                }
+            }
+
+            // Event Listeners
+            hSlider.addEventListener('input', updateSimulation);
+            rhoSlider.addEventListener('input', updateSimulation);
+
+            // Initial calculation on load
+            updateSimulation();
+        });
+    </script>
+</body>
+</html>
